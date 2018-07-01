@@ -1,8 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require('inquirer');
 const bamazonTable = require("./table.js");
-
-
+const colors = require('colors');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -10,7 +9,7 @@ var connection = mysql.createConnection({
 
   user: "root",
   password: "root",
-  database: "bamazon2",
+  database: "bamazon",
 });
 
 connection.connect(function (err) {
@@ -77,7 +76,7 @@ function addStock(){
     connection.query('SELECT * FROM products WHERE ?', { id: item }, function(error, res){
       if (error) throw error;               
       if(quantity < res[0].stock_quantity){
-        console.log(`\n \n The Bamazon has been updated ! You add ${quantity} item(s) on ${res[0].product_name}!   \n \n`)
+        console.log(`\n \n The Bamazon has been updated ! You add ${quantity} item(s) on ${res[0].product_name}!   \n \n`.magenta);
         connection.query('UPDATE products SET stock_quantity = ? WHERE id = ?', [res[0].stock_quantity + quantity, item])
       }
       managerPrompt()
@@ -116,7 +115,7 @@ function addProduct(){
       price: input.price,
       stock_quantity: input.stock_quantity
     }, function(err,res){
-      console.log(`\n \n The ${input.product} has been inserted at ${input.department} with ${input.stock_quantity} quantity and a total cost $${input.price} per unit \n \n`)
+      console.log(`\n \n The ${input.product} has been inserted at ${input.department} with ${input.stock_quantity} quantity and a total cost $${input.price} per unit \n \n`.magenta)
       managerPrompt()
     });
   })
